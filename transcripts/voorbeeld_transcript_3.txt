@@ -1,0 +1,51 @@
+Klantenservice Gesprek - 2025-09-30
+
+Agent: Goedemiddag, u spreekt met Sarah van de klantenservice. Waarmee kan ik u helpen?
+
+Klant: Hallo, ik wil een klacht indienen over de levering van mijn bestelling. Het is al vijf dagen te laat!
+
+Agent: Dat spijt me zeer te horen. Mag ik uw ordernummer hebben?
+
+Klant: Het is ORDER-2025-5123.
+
+Agent: Dank u. Ik zie dat uw bestelling inderdaad vertraagd is. Er was een probleem bij de vervoerder waardoor meerdere pakketten vertraagd zijn.
+
+Klant: Dit is echt onacceptabel. Ik heb dit product dringend nodig voor mijn werk. Dit is al de derde keer dat jullie te laat leveren!
+
+Agent: Ik begrijp uw frustratie volledig en bied mijn oprechte excuses aan. Laat me kijken wat ik kan doen om dit op te lossen.
+
+Klant: Ik wil gewoon mijn pakket zo snel mogelijk ontvangen. En ik verwacht ook compensatie voor al deze vertragingen.
+
+Agent: Ik kan het pakket upgraden naar express levering zonder kosten. Het zou morgen bij u moeten zijn. En ik kan u een tegoedbon van €25 aanbieden als compensatie.
+
+Klant: Oké, maar als het morgen niet aankomt, wil ik mijn geld terug. Ik ben het zat om steeds te moeten bellen over vertragingen.
+
+Agent: Dat begrijp ik volledig. Ik zal een notitie plaatsen bij uw account en u persoonlijk een track & trace link sturen.
+
+Klant: Goed. Maar ik heb ook een probleem met de website. Toen ik probeerde in te loggen, kreeg ik steeds een foutmelding.
+
+Agent: Dat spijt me te horen. Welke foutmelding kreeg u precies?
+
+Klant: Er stond "Server Error 500". Ik moest het drie keer proberen voordat ik kon inloggen.
+
+Agent: Dank u voor het melden. Ik zal dit doorgeven aan ons IT-team. We hebben recent wat technische problemen gehad.
+
+Klant: Dat merk ik. De hele website is de laatste tijd erg traag. Het duurt soms minuten voordat een pagina laadt.
+
+Agent: Mijn excuses daarvoor. We zijn bezig met het upgraden van onze servers om de prestaties te verbeteren.
+
+Klant: Dat hoop ik. En nog iets - de klantenservice is ook niet geweldig. Ik moest 30 minuten wachten voordat iemand opnam.
+
+Agent: Mijn excuses voor de lange wachttijd. We hebben momenteel te maken met een hoog volume aan oproepen door de vertragingen.
+
+Klant: Jullie moeten echt meer personeel aannemen. Dit is niet de eerste keer dat ik zo lang moet wachten.
+
+Agent: Ik begrijp uw punt en zal uw feedback doorgeven aan management. Is er verder nog iets waarmee ik u kan helpen?
+
+Klant: Nee, ik hoop gewoon dat mijn pakket morgen echt aankomt. Anders hoor je weer van me.
+
+Agent: Ik begrijp het. U ontvangt vandaag nog een email met de track & trace informatie. Bedankt voor uw geduld.
+
+Klant: Oké, we zullen zien. Tot ziens.
+
+Agent: Fijne dag verder. Tot ziens.

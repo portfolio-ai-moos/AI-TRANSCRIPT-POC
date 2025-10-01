@@ -1,0 +1,45 @@
+Klantenservice Gesprek - 2025-09-29
+
+Agent: Goedemorgen, u spreekt met Mark van de klantenservice. Hoe kan ik u van dienst zijn?
+
+Klant: Hallo, ik heb een probleem met een product dat ik gisteren heb ontvangen. Het werkt niet zoals beschreven op de website.
+
+Agent: Dat vervelend om te horen. Kunt u me vertellen welk product het betreft?
+
+Klant: Het is de draadloze koptelefoon, model XZ-500. De batterij gaat maar 2 uur mee terwijl er staat dat het 20 uur zou moeten zijn.
+
+Agent: Ik begrijp het. Heeft u de koptelefoon volledig opgeladen voordat u hem voor het eerst gebruikte?
+
+Klant: Ja, ik heb hem de hele nacht opgeladen zoals in de handleiding staat.
+
+Agent: Dan lijkt het erop dat er een defect is aan het product. Ik kan een vervangend product voor u regelen of een volledige terugbetaling.
+
+Klant: Ik wil graag een vervangend product. Maar ik wil niet weer zo lang wachten op de levering. De vorige keer duurde het bijna twee weken.
+
+Agent: Ik begrijp uw zorgen. Ik zal ervoor zorgen dat het vervangende product via express verzending wordt verstuurd. U zou het binnen 2-3 werkdagen moeten ontvangen.
+
+Klant: Oké, dat klinkt beter. Maar ik moet wel zeggen dat ik teleurgesteld ben in de productkwaliteit. Dit is niet de eerste keer dat ik een defect product ontvang.
+
+Agent: Mijn oprechte excuses daarvoor. We nemen kwaliteitscontrole zeer serieus. Ik zal uw feedback doorgeven aan ons kwaliteitsteam.
+
+Klant: Graag. En nog iets - de verpakking was ook beschadigd toen het aankwam. De doos was helemaal ingedeukt.
+
+Agent: Dat spijt me te horen. Ik zal ook een notitie maken voor ons logistiek team. Voor het ongemak wil ik u graag een kortingscode van 15% aanbieden voor uw volgende aankoop.
+
+Klant: Dat is aardig, dank u. Maar eerlijk gezegd ben ik ook niet tevreden over de klantenservice. Ik heb vorige week een email gestuurd maar nog geen antwoord ontvangen.
+
+Agent: Mijn excuses voor de vertraagde reactie. We hebben momenteel een achterstand in onze email support. Ik zal ervoor zorgen dat uw email met prioriteit wordt behandeld.
+
+Klant: Goed. Nog één vraag - kan ik het defecte product retourneren zonder verzendkosten?
+
+Agent: Absoluut. Ik stuur u een retourlabel via email. U hoeft alleen het pakket bij een PostNL punt af te geven.
+
+Klant: Prima. Wanneer kan ik het retourlabel verwachten?
+
+Agent: U ontvangt het binnen 24 uur. Is er verder nog iets waarmee ik u kan helpen?
+
+Klant: Nee, dat was het. Bedankt voor uw hulp.
+
+Agent: Graag gedaan. Nogmaals onze excuses voor het ongemak. Fijne dag verder!
+
+Klant: Dank u, u ook. Tot ziens.
