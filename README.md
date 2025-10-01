@@ -2,6 +2,8 @@
 
 **Portfolio Project**: Production-ready RAG (Retrieval-Augmented Generation) system voor transcript analyse
 
+<!-- placeholder edit -->
+
 [![Tech Stack](https://img.shields.io/badge/Gemini-AI-blue)](https://ai.google.dev/)
 [![LangChain](https://img.shields.io/badge/LangChain-LCEL-green)](https://langchain.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Vector_DB-orange)](https://supabase.com/)

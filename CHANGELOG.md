@@ -29,6 +29,7 @@
 - 🎯 **KLAAR OM TE TESTEN!**
   - Run: `python ingest_data.py` (local)
   - Dan: `streamlit run app.py`
+- 🔄 02:38 - README placeholder comment toegevoegd (geen functionele impact)
 
 **Stap 4.5: V2 Upgrade - Enterprise SaaS Look - 22:19**
 - ✅ **Professional SaaS Styling** - Complete CSS overhaul
