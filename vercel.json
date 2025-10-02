@@ -1,12 +1,7 @@
 {
   "functions": {
     "api/analyze.py": {
-      "runtime": "python3.10",
-      "env": {
-        "SUPABASE_URL": "SUPABASE_URL",
-        "SUPABASE_KEY": "SUPABASE_KEY",
-        "GOOGLE_API_KEY": "GOOGLE_API_KEY"
-      }
+      "runtime": "python3.10"
     }
   }
 }
