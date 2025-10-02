@@ -1,23 +1,12 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python3.9"
+  "functions": {
+    "api/analyze.py": {
+      "runtime": "python3.10",
+      "env": {
+        "SUPABASE_URL": "SUPABASE_URL",
+        "SUPABASE_KEY": "SUPABASE_KEY",
+        "GOOGLE_API_KEY": "GOOGLE_API_KEY"
       }
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    }
-  ],
-  "env": {
-    "SUPABASE_URL": "@supabase_url",
-    "SUPABASE_KEY": "@supabase_key",
-    "OPENAI_API_KEY": "@openai_api_key"
   }
 }
