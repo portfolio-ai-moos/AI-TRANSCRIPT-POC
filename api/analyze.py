@@ -1,19 +1,16 @@
 """
 RAG API Serverless Function voor AI Transcript Analyzer
 Gebruikt Gemini voor embeddings en chat, Supabase voor vector search
+Lightweight version zonder langchain voor Vercel size limits
 """
 
 import os
 import json
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from http.server import BaseHTTPRequestHandler
 
 from pydantic import BaseModel, Field
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import PydanticOutputParser
-from langchain_core.runnables import RunnablePassthrough
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_community.vectorstores import SupabaseVectorStore
+import google.generativeai as genai
 from supabase import create_client, Client
 
 
@@ -34,68 +31,77 @@ class AnalyseResultaat(BaseModel):
 
 
 # ============================================================================
-# LAZY INITIALIZATION - Cruciale fix voor Vercel DESCRIPTOR fout
+# LAZY INITIALIZATION - Lightweight without langchain
 # ============================================================================
 
-_embeddings = None
-_vectorstore = None
-_llm = None
-_rag_chain = None
+_supabase_client = None
+_genai_configured = False
 
 
-def get_embeddings() -> GoogleGenerativeAIEmbeddings:
-    """Lazy initialisatie van Gemini embeddings"""
-    global _embeddings
-    if _embeddings is None:
-        _embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001",
-            google_api_key=os.environ.get("GOOGLE_API_KEY")
-        )
-    return _embeddings
-
-
-def get_vectorstore() -> SupabaseVectorStore:
-    """Lazy initialisatie van Supabase vector store"""
-    global _vectorstore
-    if _vectorstore is None:
+def get_supabase_client() -> Client:
+    """Lazy initialisatie van Supabase client"""
+    global _supabase_client
+    if _supabase_client is None:
         supabase_url = os.environ.get("SUPABASE_URL")
         supabase_key = os.environ.get("SUPABASE_KEY")
         
         if not supabase_url or not supabase_key:
             raise ValueError("SUPABASE_URL en SUPABASE_KEY moeten ingesteld zijn")
         
-        supabase_client: Client = create_client(supabase_url, supabase_key)
-        
-        _vectorstore = SupabaseVectorStore(
-            client=supabase_client,
-            embedding=get_embeddings(),
-            table_name="transcript_vectors",
-            query_name="match_documents"
-        )
-    return _vectorstore
+        _supabase_client = create_client(supabase_url, supabase_key)
+    return _supabase_client
 
 
-def get_llm() -> ChatGoogleGenerativeAI:
-    """Lazy initialisatie van Gemini chat model"""
-    global _llm
-    if _llm is None:
-        _llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",
-            google_api_key=os.environ.get("GOOGLE_API_KEY"),
-            temperature=0.3
-        )
-    return _llm
+def configure_genai():
+    """Configure Google AI"""
+    global _genai_configured
+    if not _genai_configured:
+        google_api_key = os.environ.get("GOOGLE_API_KEY")
+        if not google_api_key:
+            raise ValueError("GOOGLE_API_KEY moet ingesteld zijn")
+        genai.configure(api_key=google_api_key)
+        _genai_configured = True
 
 
-def get_rag_chain():
-    """Lazy initialisatie van de complete RAG chain"""
-    global _rag_chain
-    if _rag_chain is None:
-        # Pydantic parser voor gestructureerde output
-        parser = PydanticOutputParser(pydantic_object=AnalyseResultaat)
-        
-        # RAG Prompt Template
-        template = """Je bent een AI-assistent die transcripten van klantenservice gesprekken analyseert.
+def get_embedding(text: str) -> List[float]:
+    """Generate embedding for text using Gemini"""
+    configure_genai()
+    result = genai.embed_content(
+        model="models/embedding-001",
+        content=text,
+        task_type="retrieval_query"
+    )
+    return result['embedding']
+
+
+def vector_search(question: str, top_k: int = 5) -> List[Dict[str, Any]]:
+    """Perform vector similarity search in Supabase"""
+    client = get_supabase_client()
+    
+    # Generate embedding for question
+    query_embedding = get_embedding(question)
+    
+    # Call Supabase RPC function for vector search
+    response = client.rpc(
+        'match_documents',
+        {
+            'query_embedding': query_embedding,
+            'match_count': top_k
+        }
+    ).execute()
+    
+    return response.data if response.data else []
+
+
+def generate_analysis(question: str, context_docs: List[Dict[str, Any]]) -> AnalyseResultaat:
+    """Generate structured analysis using Gemini"""
+    configure_genai()
+    
+    # Format context
+    context = "\n\n".join([doc.get('content', '') for doc in context_docs])
+    
+    # Build prompt
+    prompt = f"""Je bent een AI-assistent die transcripten van klantenservice gesprekken analyseert.
 
 Gebruik de volgende context om de vraag te beantwoorden:
 
@@ -109,37 +115,36 @@ INSTRUCTIES:
 1. Identificeer alle klachten in de context
 2. Tel hoe vaak elke klacht voorkomt
 3. Geef een beknopte samenvatting per klacht
-4. Retourneer het resultaat in het gevraagde JSON formaat
+4. Retourneer het resultaat als JSON object met deze structuur:
+{{
+  "klachten": [
+    {{
+      "naam": "Naam van klacht",
+      "frequentie": aantal_keer_voorkomend,
+      "samenvatting": "Korte uitleg"
+    }}
+  ]
+}}
 
-{format_instructions}
-
-ANTWOORD:"""
-
-        prompt = ChatPromptTemplate.from_template(template)
-        
-        # Retriever voor vector search
-        retriever = get_vectorstore().as_retriever(
-            search_kwargs={"k": 5}
-        )
-        
-        # LCEL Chain: Retrieval -> Prompt -> LLM -> Parser
-        _rag_chain = (
-            {
-                "context": retriever | format_docs,
-                "question": RunnablePassthrough(),
-                "format_instructions": lambda _: parser.get_format_instructions()
-            }
-            | prompt
-            | get_llm()
-            | parser
-        )
+ANTWOORD (alleen JSON, geen extra tekst):"""
     
-    return _rag_chain
-
-
-def format_docs(docs) -> str:
-    """Formatteer retrieved documents naar string"""
-    return "\n\n".join([doc.page_content for doc in docs])
+    # Generate response with Gemini
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    response = model.generate_content(prompt)
+    
+    # Parse JSON from response
+    response_text = response.text.strip()
+    
+    # Remove markdown code blocks if present
+    if response_text.startswith('```'):
+        response_text = response_text.split('```')[1]
+        if response_text.startswith('json'):
+            response_text = response_text[4:]
+        response_text = response_text.strip()
+    
+    # Parse to Pydantic model
+    result_dict = json.loads(response_text)
+    return AnalyseResultaat(**result_dict)
 
 
 # ============================================================================
@@ -163,14 +168,14 @@ class handler(BaseHTTPRequestHandler):
                 self.send_error(400, "Vraag is verplicht")
                 return
             
-            # Voer RAG chain uit
-            rag_chain = get_rag_chain()
-            result: AnalyseResultaat = rag_chain.invoke(question)
+            # Perform vector search
+            source_docs = vector_search(question, top_k=5)
             
-            # Haal ook de gebruikte bronnen op voor transparantie
-            retriever = get_vectorstore().as_retriever(search_kwargs={"k": 5})
-            source_docs = retriever.invoke(question)
-            used_sources = [doc.page_content[:200] + "..." for doc in source_docs]
+            # Generate analysis with Gemini
+            result: AnalyseResultaat = generate_analysis(question, source_docs)
+            
+            # Extract snippets for transparency
+            used_sources = [doc.get('content', '')[:200] + "..." for doc in source_docs]
             
             # Bouw response
             response_data = {
