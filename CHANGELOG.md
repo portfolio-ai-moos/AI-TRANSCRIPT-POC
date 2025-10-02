@@ -1,6 +1,18 @@
 # Changelog
 
-## 2025-10-02 - Production Launch (09:37)
+## 2025-10-02 - Production Launch (09:44)
+
+**UI V3: High-Tech Portfolio Redesign**
+- ✅ **Dark Theme** – Complete redesign met professional high-tech look (#0f172a background)
+- ✅ **Portfolio Branding** – Prominent banner bovenaan die duidelijk toont: "Portfolio Project | AI Engineering Showcase"
+- ✅ **Improved Readability** – Fixed white text blocks, alle content is nu helder leesbaar
+- ✅ **Professional Typography** – Inter font family, proper sizing en line-heights
+- ✅ **Enhanced Cards** – Gradient backgrounds, proper shadows, hover effects
+- ✅ **Better Alignment** – All sections properly aligned en consistent spacing
+- ✅ **Readable Source Snippets** – Custom styled boxes met goede contrast
+- ✅ **Portfolio Footer** – Clear messaging about skills demonstration
+- 🎨 **Color Scheme** – Blue (#3b82f6) + Purple (#8b5cf6) + Pink (#ec4899) gradients
+- 🎯 **Skills Showcase** – Sidebar en footer benadrukken AI engineering vaardigheden
 
 - ✅ **Gemini Upgrade** – `api/analyze.py` draait nu op `gemini-2.5-flash` zonder LangChain voor lightweight deployments
 - ✅ **Vector Search Fix** – Supabase `transcript_vectors.embedding` aangepast naar 768 dimensies en ingest_data ingest opnieuw uitgevoerd (21 chunks)

@@ -22,135 +22,215 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional SaaS styling
+# Custom CSS for professional high-tech styling
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
     /* Main container styling */
     .main {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: #0f172a;
+        color: #e2e8f0;
+    }
+    
+    /* Portfolio Banner */
+    .portfolio-banner {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+    }
+    
+    .portfolio-banner h4 {
+        color: white;
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    
+    .portfolio-banner p {
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0.5rem 0 0 0;
+        font-size: 0.95rem;
     }
     
     /* Header styling */
     .main-header {
         font-size: 3.5rem;
         font-weight: 800;
-        background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(120deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.5rem;
         text-align: center;
-        letter-spacing: -1px;
+        letter-spacing: -2px;
     }
     
     .subtitle {
-        font-size: 1.3rem;
-        color: #555;
+        font-size: 1.2rem;
+        color: #94a3b8;
         margin-bottom: 2rem;
         text-align: center;
         font-weight: 400;
     }
     
-    /* Card styling */
+    /* Info cards */
     .stAlert {
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+        border-radius: 12px !important;
+        color: #e2e8f0 !important;
     }
     
     /* Tech badge styling */
     .tech-badge {
         display: inline-block;
-        padding: 0.4rem 1rem;
-        margin: 0.3rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 0.5rem 1.2rem;
+        margin: 0.4rem;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         color: white;
         border-radius: 20px;
         font-size: 0.85rem;
         font-weight: 600;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
     
     /* Complaint card styling */
     .complaint-card {
-        background: white;
-        padding: 1.8rem;
-        border-radius: 15px;
-        border-left: 5px solid #667eea;
-        margin: 1.2rem 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        transition: transform 0.2s;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        border-left: 4px solid #3b82f6;
+        margin: 1.5rem 0;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s;
+        color: #e2e8f0;
     }
     
     .complaint-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(59, 130, 246, 0.3);
+        border-left-color: #8b5cf6;
+    }
+    
+    .complaint-card h4 {
+        color: #3b82f6;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .complaint-card p {
+        color: #cbd5e1;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 0.5rem 0;
+    }
+    
+    .complaint-card strong {
+        color: #3b82f6;
     }
     
     /* Button styling */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         color: white;
         border: none;
-        border-radius: 10px;
-        padding: 0.6rem 2rem;
-        font-weight: 600;
-        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        border-radius: 12px;
+        padding: 0.75rem 2rem;
+        font-weight: 700;
+        font-size: 1rem;
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
         transition: all 0.3s;
     }
     
     .stButton > button:hover {
-        box-shadow: 0 6px 12px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 12px 24px rgba(59, 130, 246, 0.6);
         transform: translateY(-2px);
     }
     
     /* Input styling */
     .stTextArea textarea {
-        border-radius: 10px;
-        border: 2px solid #e0e0e0;
+        background: #1e293b;
+        border-radius: 12px;
+        border: 2px solid #334155;
         padding: 1rem;
         font-size: 1rem;
+        color: #e2e8f0;
     }
     
     .stTextArea textarea:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
     }
     
     /* Sidebar styling */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-right: 1px solid #334155;
     }
     
     [data-testid="stSidebar"] * {
-        color: white !important;
+        color: #e2e8f0 !important;
     }
     
-    /* Metric cards */
-    .metric-container {
-        background: white;
+    /* Metric styling */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #3b82f6;
+    }
+    
+    /* Code block styling */
+    .stCodeBlock {
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+        border-radius: 8px !important;
+    }
+    
+    code {
+        color: #3b82f6 !important;
+        background: #1e293b !important;
+        padding: 0.2rem 0.4rem !important;
+        border-radius: 4px !important;
+    }
+    
+    /* Divider */
+    hr {
+        border-color: #334155 !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background: #1e293b;
+        border-radius: 8px;
+        color: #e2e8f0 !important;
+    }
+    
+    /* Source snippet card */
+    .source-snippet {
+        background: #1e293b;
         padding: 1.5rem;
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        text-align: center;
+        border-left: 3px solid #8b5cf6;
+        margin: 1rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     
-    /* Status indicator */
-    .status-badge {
-        display: inline-block;
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-    
-    .status-active {
-        background: #10b981;
-        color: white;
-    }
-    
-    .status-warning {
-        background: #f59e0b;
-        color: white;
+    .source-snippet pre {
+        color: #cbd5e1;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+        white-space: pre-wrap;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -168,22 +248,21 @@ API_ENDPOINT = st.secrets.get("API_ENDPOINT", DEFAULT_API_ENDPOINT)
 # ============================================================================
 
 with st.sidebar:
-    st.markdown("### 🎯 Portfolio Project")
-    st.markdown("**AI Transcript Analyzer**")
-    st.markdown("*Retrieval-Augmented Generation System*")
+    st.markdown("### 👨‍💻 Portfolio Showcase")
+    st.markdown("Deze applicatie demonstreert **full-stack AI engineering** vaardigheden")
     
     st.divider()
     
     st.markdown("### 🛠️ Tech Stack")
     st.markdown("""
     <div>
-        <span class="tech-badge">Gemini AI</span>
-        <span class="tech-badge">LangChain</span>
+        <span class="tech-badge">Gemini 2.5</span>
         <span class="tech-badge">Supabase</span>
         <span class="tech-badge">pgvector</span>
         <span class="tech-badge">Vercel</span>
         <span class="tech-badge">Streamlit</span>
         <span class="tech-badge">Pydantic</span>
+        <span class="tech-badge">Python</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -191,32 +270,39 @@ with st.sidebar:
     
     st.markdown("### 🏗️ Architecture")
     st.markdown("""
-    - **Vector DB**: Supabase + pgvector
+    - **Vector DB**: Supabase + pgvector (768-dim)
     - **Embeddings**: Gemini embedding-001
-    - **LLM**: Gemini 1.5 Flash
-    - **Framework**: LangChain LCEL
-    - **Deployment**: Vercel Serverless
+    - **LLM**: Gemini 2.5 Flash
+    - **Backend**: Vercel Serverless Python
+    - **RAG Pattern**: Direct API integration
     """)
     
     st.divider()
     
-    st.markdown("### ⚙️ API Status")
+    st.markdown("### ⚙️ Production Status")
     if API_ENDPOINT != DEFAULT_API_ENDPOINT:
-        st.success("✅ Custom endpoint configured")
-        st.code(API_ENDPOINT, language="text")
+        st.success("✅ Live Production API")
+        st.caption("🌐 Deployed on Vercel")
     else:
-        st.warning("⚠️ Using default endpoint")
-        st.caption("Update `API_ENDPOINT` in Streamlit secrets")
+        st.warning("⚠️ Demo endpoint")
+        st.caption("Configure production URL")
 
 # ============================================================================
 # MAIN CONTENT
 # ============================================================================
 
+# Portfolio Banner
+st.markdown("""
+<div class="portfolio-banner">
+    <h4>🎓 Portfolio Project | AI Engineering Showcase</h4>
+    <p>Deze applicatie toont mijn vaardigheden in moderne AI architectuur, RAG-systemen, en production-ready deployments</p>
+</div>
+""", unsafe_allow_html=True)
+
 # Header
 st.markdown('<h1 class="main-header">🧠 AI Transcript Analyzer</h1>', unsafe_allow_html=True)
 st.markdown(
-    '<p class="subtitle">Powered by Retrieval-Augmented Generation (RAG) | '
-    'Gemini AI + Supabase Vector Search</p>',
+    '<p class="subtitle">Enterprise RAG System | Gemini 2.5 Flash + Supabase Vector Search</p>',
     unsafe_allow_html=True
 )
 
@@ -407,10 +493,12 @@ if submitted and question.strip():
             if used_sources:
                 with st.expander(f"📚 Bekijk {len(used_sources)} bronfragmenten", expanded=False):
                     for idx, snippet in enumerate(used_sources, 1):
-                        st.markdown(f"**Bron {idx}**")
-                        st.code(snippet, language="text")
-                        if idx < len(used_sources):
-                            st.divider()
+                        st.markdown(f"**📄 Bron {idx}**")
+                        st.markdown(f"""
+                        <div class="source-snippet">
+                            <pre>{snippet}</pre>
+                        </div>
+                        """, unsafe_allow_html=True)
             else:
                 st.warning("⚠️ Geen bronfragmenten beschikbaar")
             
@@ -458,16 +546,29 @@ elif submitted:
 st.divider()
 
 st.markdown("""
-<div style="text-align: center; color: #555; padding: 3rem 0;">
-    <h3 style="margin-bottom: 1rem;">🧠 AI Transcript Analyzer V2</h3>
-    <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">
-        <strong>Enterprise-Grade RAG System</strong> | Portfolio Project
-    </p>
-    <p style="font-size: 0.95rem; color: #777;">
-        Showcasing modern AI architecture with LangChain LCEL, Gemini AI, and Supabase pgvector
-    </p>
-    <p style="font-size: 0.85rem; color: #999; margin-top: 1rem;">
-        Built with ❤️ for demonstrating production-ready AI engineering skills
-    </p>
+<div style="text-align: center; padding: 3rem 0;">
+    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+                padding: 2rem; 
+                border-radius: 16px; 
+                border: 1px solid #334155;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #3b82f6; margin-bottom: 1rem; font-size: 1.8rem; font-weight: 700;">
+            🧠 AI Transcript Analyzer
+        </h3>
+        <p style="font-size: 1.2rem; margin-bottom: 1rem; color: #e2e8f0;">
+            <strong style="color: #8b5cf6;">Portfolio Project</strong> | Enterprise RAG System
+        </p>
+        <p style="font-size: 1rem; color: #94a3b8; margin-bottom: 1.5rem; line-height: 1.6;">
+            Deze applicatie demonstreert geavanceerde AI engineering skills:<br/>
+            <strong style="color: #3b82f6;">Gemini 2.5 Flash</strong> | 
+            <strong style="color: #3b82f6;">Vector Search</strong> | 
+            <strong style="color: #3b82f6;">Serverless Deployment</strong> | 
+            <strong style="color: #3b82f6;">Production-Ready Code</strong>
+        </p>
+        <p style="font-size: 0.9rem; color: #64748b; margin-top: 1.5rem; font-style: italic;">
+            Gebouwd om mijn vaardigheden te tonen in full-stack AI development,<br/>
+            van database design tot frontend UX
+        </p>
+    </div>
 </div>
 """, unsafe_allow_html=True)
