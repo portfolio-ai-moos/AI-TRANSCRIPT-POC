@@ -2,12 +2,11 @@
 
 **Portfolio Project**: Production-ready RAG (Retrieval-Augmented Generation) system voor transcript analyse
 
-<!-- placeholder edit -->
-
-[![Tech Stack](https://img.shields.io/badge/Gemini-AI-blue)](https://ai.google.dev/)
-[![LangChain](https://img.shields.io/badge/LangChain-LCEL-green)](https://langchain.com/)
+![Production Status](https://img.shields.io/badge/Status-Live-brightgreen)
+[![Tech Stack](https://img.shields.io/badge/Gemini-2.5_Flash-blue)](https://ai.google.dev/)
 [![Supabase](https://img.shields.io/badge/Supabase-Vector_DB-orange)](https://supabase.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Serverless-black)](https://vercel.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Frontend-ff4b4b)](https://streamlit.io/)
 
 ---
 
@@ -48,7 +47,7 @@ Dit project demonstreert een **end-to-end AI-systeem** dat:
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| **LLM** | Gemini 1.5 Flash | Klachten analyse & structured output |
+| **LLM** | Gemini 2.5 Flash | Klachten analyse & structured output |
 | **Embeddings** | Gemini embedding-001 | Vector representations (1536 dim) |
 | **Vector DB** | Supabase + pgvector | Similarity search met IVFFlat index |
 | **Framework** | LangChain LCEL | RAG pipeline orchestration |
@@ -82,20 +81,18 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your_supabase_anon_or_service_key
 ```
 
-**Waar vind je deze keys?**
 - **GOOGLE_API_KEY**: [Google AI Studio](https://makersuite.google.com/app/apikey)
 - **SUPABASE_URL & KEY**: Supabase Dashboard → Project Settings → API
 
 #### D. Deploy & Test
 ```bash
-# Vercel deployment URL (voorbeeld)
-https://your-project.vercel.app/api/analyze
+# Vercel deployment URL (production)
+https://ai-transcript-analyzer.vercel.app/api/analyze
 ```
 
 Test de API:
 ```bash
-curl -X POST https://your-project.vercel.app/api/analyze \
-  -H "Content-Type: application/json" \
+curl -X POST https://ai-transcript-analyzer.vercel.app/api/analyze \
   -d '{"question": "Wat zijn de meest voorkomende klachten?"}'
 ```
 
@@ -112,7 +109,7 @@ curl -X POST https://your-project.vercel.app/api/analyze \
 5. **Advanced settings** → Secrets:
 
 ```toml
-API_ENDPOINT = "https://your-project.vercel.app/api/analyze"
+API_ENDPOINT = "https://ai-transcript-demo-1.vercel.app/api/analyze"
 ```
 
 6. Deploy! 🚀
@@ -125,7 +122,7 @@ pip install -r requirements.txt
 
 # Maak .streamlit/secrets.toml
 mkdir -p .streamlit
-echo 'API_ENDPOINT = "https://your-project.vercel.app/api/analyze"' > .streamlit/secrets.toml
+echo 'API_ENDPOINT = "https://ai-transcript-demo-1.vercel.app/api/analyze"' > .streamlit/secrets.toml
 
 # Run Streamlit
 streamlit run app.py

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025-10-02 - Production Launch (09:37)
+
+- ✅ **Gemini Upgrade** – `api/analyze.py` draait nu op `gemini-2.5-flash` zonder LangChain voor lightweight deployments
+- ✅ **Vector Search Fix** – Supabase `transcript_vectors.embedding` aangepast naar 768 dimensies en ingest_data ingest opnieuw uitgevoerd (21 chunks)
+- ✅ **Lightweight Backend Dependencies** – `requirements.txt` geminimaliseerd, `requirements-local.txt` voor lokale tools toegevoegd
+- ✅ **Security** – `.env` aangemaakt (gitignored) in combinatie met Vercel/Streamlit secrets flow
+- ✅ **Documentation Refresh** – README badges + productie-instructies geüpdatet
+- ✅ **Live Test** – Production endpoint `https://ai-transcript-demo-1.vercel.app/api/analyze` levert nu klachtenanalyse en bron snippets
+
 ## 2025-10-01 - Project Restart (22:09)
 
 **Stap 5: Data Ingestion - 22:22**

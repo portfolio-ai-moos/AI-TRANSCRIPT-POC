@@ -37,9 +37,15 @@ Agent: Absoluut. Ik stuur u een retourlabel via email. U hoeft alleen het pakket
 Klant: Prima. Wanneer kan ik het retourlabel verwachten?
 
 Agent: U ontvangt het binnen 24 uur. Is er verder nog iets waarmee ik u kan helpen?
-
 Klant: Nee, dat was het. Bedankt voor uw hulp.
 
 Agent: Graag gedaan. Nogmaals onze excuses voor het ongemak. Fijne dag verder!
 
 Klant: Dank u, u ook. Tot ziens.
+
+Samenvatting Klachten:
+- Batterijduur van draadloze koptelefoon XZ-500 is slechts 2 uur i.p.v. 20 uur
+- Herhaalde defecte producten en beschadigde verpakking bij LEVERING
+- Trage LEVERING (vorige bestelling duurde bijna twee weken)
+- Geen reactie op klantenservice e-mail (achterstand support)
+- Vervangend product en retourlabel gewenst zonder extra kosten
