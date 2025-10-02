@@ -243,6 +243,18 @@ st.markdown("""
 DEFAULT_API_ENDPOINT = "https://your-project.vercel.app/api/analyze"
 API_ENDPOINT = st.secrets.get("API_ENDPOINT", DEFAULT_API_ENDPOINT)
 
+# Session state bootstrap
+if "analysis_result" not in st.session_state:
+    st.session_state["analysis_result"] = None
+if "analysis_question" not in st.session_state:
+    st.session_state["analysis_question"] = ""
+if "analysis_error" not in st.session_state:
+    st.session_state["analysis_error"] = None
+if "question_input" not in st.session_state:
+    st.session_state["question_input"] = ""
+if "expand_sources" not in st.session_state:
+    st.session_state["expand_sources"] = False
+
 # ============================================================================
 # SIDEBAR - PORTFOLIO INFO
 # ============================================================================
@@ -328,12 +340,13 @@ st.caption("🔍 De AI doorzoekt duizenden transcripten met vector similarity se
 col_input, col_button = st.columns([5, 1])
 
 with col_input:
-    question = st.text_area(
+    st.text_area(
         "Jouw vraag:",
         placeholder="Bijvoorbeeld: Wat zijn de meest voorkomende klachten over de levertijd?",
         height=120,
         help="De AI zal de transcript database doorzoeken en een gestructureerde analyse geven",
-        label_visibility="collapsed"
+        label_visibility="collapsed",
+        key="question_input"
     )
 
 with col_button:
@@ -341,6 +354,16 @@ with col_button:
     st.write("")  # Spacing
     submitted = st.button("🚀 Analyseer", use_container_width=True, type="primary")
     clear_btn = st.button("🗑️ Clear", use_container_width=True)
+
+question_value = st.session_state["question_input"].strip()
+
+if clear_btn:
+    st.session_state["question_input"] = ""
+    st.session_state["analysis_result"] = None
+    st.session_state["analysis_question"] = ""
+    st.session_state["analysis_error"] = None
+    st.session_state["expand_sources"] = False
+    st.experimental_rerun()
 
 # ============================================================================
 # API CALL & RESULTS
@@ -354,7 +377,121 @@ def analyze_question(question: str) -> Dict:
     return response.json()
 
 
-if submitted and question.strip():
+def render_analysis(result: Dict, fallback_question: str) -> None:
+    """Render the analysis results in the UI"""
+    st.success("🎉 **Analyse succesvol!** De AI heeft je vraag verwerkt met RAG.")
+    displayed_question = result.get("question") or fallback_question
+    if displayed_question:
+        st.markdown(f"**📝 Vraag:** {displayed_question}")
+
+    st.divider()
+
+    analysis = result.get("analysis", {})
+    klachten = analysis.get("klachten", [])
+
+    if klachten:
+        st.markdown("### 📊 Geïdentificeerde Klachten")
+
+        sorted_klachten = sorted(
+            klachten,
+            key=lambda x: x.get("frequentie", 0),
+            reverse=True
+        )
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Totaal Klachten",
+                len(sorted_klachten),
+                help="Aantal unieke klachten geïdentificeerd"
+            )
+        with col2:
+            total_freq = sum(k.get("frequentie", 0) for k in sorted_klachten)
+            st.metric(
+                "Totale Frequentie",
+                total_freq,
+                help="Totaal aantal keer genoemd"
+            )
+        with col3:
+            top_klacht = sorted_klachten[0].get("naam", "N/A") if sorted_klachten else "N/A"
+            st.metric(
+                "Top Klacht",
+                top_klacht[:20] + "..." if len(top_klacht) > 20 else top_klacht,
+                help="Meest voorkomende klacht"
+            )
+
+        st.write("")
+
+        df = pd.DataFrame([
+            {
+                "Klacht": k.get("naam", "Onbekend"),
+                "Frequentie": k.get("frequentie", 0),
+                "Samenvatting": k.get("samenvatting", "")
+            }
+            for k in sorted_klachten
+        ])
+
+        fig = px.bar(
+            df,
+            x="Klacht",
+            y="Frequentie",
+            title="📈 Klachten Frequentie Analyse",
+            color="Frequentie",
+            color_continuous_scale="Purples",
+            text="Frequentie",
+            hover_data=["Samenvatting"]
+        )
+        fig.update_layout(
+            showlegend=False,
+            height=450,
+            xaxis_title="",
+            yaxis_title="Aantal keer genoemd",
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            font=dict(size=12)
+        )
+        fig.update_traces(textposition='outside', marker_line_width=0)
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("### 📋 Gedetailleerde Analyse")
+        for idx, klacht in enumerate(sorted_klachten, 1):
+            with st.container():
+                st.markdown(f"""
+                <div class="complaint-card">
+                    <h4>#{idx} {klacht.get('naam', 'Onbekend')}</h4>
+                    <p><strong>Frequentie:</strong> {klacht.get('frequentie', 0)}x genoemd</p>
+                    <p>{klacht.get('samenvatting', 'Geen samenvatting beschikbaar')}</p>
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.info("ℹ️ Geen specifieke klachten geïdentificeerd in de analyse.")
+
+    st.divider()
+
+    st.markdown("### 🔍 RAG Grondigheid: Gebruikte Bronnen")
+    st.caption(
+        "Deze fragmenten tonen de daadwerkelijke transcript-stukken die de AI "
+        "heeft gebruikt voor de analyse. Dit bewijst dat de output 'grounded' is."
+    )
+
+    used_sources = result.get("used_sources_snippets", [])
+
+    if used_sources:
+        expand_sources = st.session_state.get("expand_sources", False)
+        with st.expander(f"📚 Bekijk {len(used_sources)} bronfragmenten", expanded=expand_sources):
+            for idx, snippet in enumerate(used_sources, 1):
+                st.markdown(f"**📄 Bron {idx}**")
+                st.markdown(f"""
+                <div class="source-snippet">
+                    <pre>{snippet}</pre>
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ Geen bronfragmenten beschikbaar")
+
+
+if submitted and question_value:
     # Professional status tracking
     with st.status("🔄 RAG Pipeline wordt uitgevoerd...", expanded=True) as status:
         try:
@@ -364,7 +501,7 @@ if submitted and question.strip():
             
             # Step 2: API Call
             st.write("🤖 **Stap 2/3:** Gemini AI analyse wordt gegenereerd...")
-            result = analyze_question(question.strip())
+            result = analyze_question(question_value)
             
             # Step 3: Complete
             st.write("✅ **Stap 3/3:** Gestructureerde output ontvangen!")
@@ -373,147 +510,29 @@ if submitted and question.strip():
             status.update(label="✅ Analyse voltooid!", state="complete", expanded=False)
             
             # Success banner
-            st.success("🎉 **Analyse succesvol!** De AI heeft je vraag verwerkt met RAG.")
-            
-            # Display question
-            st.markdown(f"**📝 Vraag:** {result.get('question', question)}")
-            
-            st.divider()
-            
-            # ================================================================
-            # KLACHTEN VISUALISATIE
-            # ================================================================
-            
-            analysis = result.get("analysis", {})
-            klachten = analysis.get("klachten", [])
-            
-            if klachten:
-                st.markdown("### 📊 Geïdentificeerde Klachten")
-                
-                # Sort by frequency
-                sorted_klachten = sorted(
-                    klachten,
-                    key=lambda x: x.get("frequentie", 0),
-                    reverse=True
-                )
-                
-                # Metrics row
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric(
-                        "Totaal Klachten",
-                        len(sorted_klachten),
-                        delta=None,
-                        help="Aantal unieke klachten geïdentificeerd"
-                    )
-                with col2:
-                    total_freq = sum(k.get("frequentie", 0) for k in sorted_klachten)
-                    st.metric(
-                        "Totale Frequentie",
-                        total_freq,
-                        delta=None,
-                        help="Totaal aantal keer genoemd"
-                    )
-                with col3:
-                    if sorted_klachten:
-                        top_klacht = sorted_klachten[0].get("naam", "N/A")
-                        st.metric(
-                            "Top Klacht",
-                            top_klacht[:20] + "..." if len(top_klacht) > 20 else top_klacht,
-                            delta=None,
-                            help="Meest voorkomende klacht"
-                        )
-                
-                st.write("")  # Spacing
-                
-                # Create DataFrame for visualization
-                df = pd.DataFrame([
-                    {
-                        "Klacht": k.get("naam", "Onbekend"),
-                        "Frequentie": k.get("frequentie", 0),
-                        "Samenvatting": k.get("samenvatting", "")
-                    }
-                    for k in sorted_klachten
-                ])
-                
-                # Interactive bar chart with Plotly
-                fig = px.bar(
-                    df,
-                    x="Klacht",
-                    y="Frequentie",
-                    title="📈 Klachten Frequentie Analyse",
-                    color="Frequentie",
-                    color_continuous_scale="Purples",
-                    text="Frequentie",
-                    hover_data=["Samenvatting"]
-                )
-                fig.update_layout(
-                    showlegend=False,
-                    height=450,
-                    xaxis_title="",
-                    yaxis_title="Aantal keer genoemd",
-                    plot_bgcolor="rgba(0,0,0,0)",
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    font=dict(size=12)
-                )
-                fig.update_traces(textposition='outside', marker_line_width=0)
-                
-                st.plotly_chart(fig, use_container_width=True)
-                
-                # Detailed complaint cards
-                st.markdown("### 📋 Gedetailleerde Analyse")
-                
-                for idx, klacht in enumerate(sorted_klachten, 1):
-                    with st.container():
-                        st.markdown(f"""
-                        <div class="complaint-card">
-                            <h4>#{idx} {klacht.get('naam', 'Onbekend')}</h4>
-                            <p><strong>Frequentie:</strong> {klacht.get('frequentie', 0)}x genoemd</p>
-                            <p>{klacht.get('samenvatting', 'Geen samenvatting beschikbaar')}</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                
-            else:
-                st.info("ℹ️ Geen specifieke klachten geïdentificeerd in de analyse.")
-            
-            st.divider()
-            
-            # ================================================================
-            # RAG TRANSPARENCY - SOURCE SNIPPETS
-            # ================================================================
-            
-            st.markdown("### 🔍 RAG Grondigheid: Gebruikte Bronnen")
-            st.caption(
-                "Deze fragmenten tonen de daadwerkelijke transcript-stukken die de AI "
-                "heeft gebruikt voor de analyse. Dit bewijst dat de output 'grounded' is."
-            )
-            
-            used_sources = result.get("used_sources_snippets", [])
-            
-            if used_sources:
-                with st.expander(f"📚 Bekijk {len(used_sources)} bronfragmenten", expanded=False):
-                    for idx, snippet in enumerate(used_sources, 1):
-                        st.markdown(f"**📄 Bron {idx}**")
-                        st.markdown(f"""
-                        <div class="source-snippet">
-                            <pre>{snippet}</pre>
-                        </div>
-                        """, unsafe_allow_html=True)
-            else:
-                st.warning("⚠️ Geen bronfragmenten beschikbaar")
-            
+            st.session_state["analysis_result"] = result
+            st.session_state["analysis_question"] = question_value
+            st.session_state["analysis_error"] = None
+            st.session_state["expand_sources"] = True
+            render_analysis(result, question_value)
         except requests.exceptions.ConnectionError:
             status.update(label="❌ Verbindingsfout", state="error", expanded=False)
             st.error("❌ **Verbindingsfout**: Kan de API niet bereiken")
             st.info("💡 **Oplossing**: Controleer of de API_ENDPOINT correct is ingesteld en de backend draait")
             with st.expander("🔧 Technische details"):
                 st.code(f"API Endpoint: {API_ENDPOINT}")
-            
+            st.session_state["analysis_result"] = None
+            st.session_state["analysis_error"] = "Verbindingsfout"
+            st.session_state["expand_sources"] = False
+
         except requests.exceptions.Timeout:
             status.update(label="⏱️ Timeout", state="error", expanded=False)
             st.error("⏱️ **Timeout**: De API reageert niet binnen 30 seconden")
             st.info("💡 **Oplossing**: De backend kan overbelast zijn of de vraag is te complex. Probeer een kortere vraag.")
-            
+            st.session_state["analysis_result"] = None
+            st.session_state["analysis_error"] = "Timeout"
+            st.session_state["expand_sources"] = False
+
         except requests.exceptions.HTTPError as e:
             status.update(label=f"❌ HTTP Error {e.response.status_code}", state="error", expanded=False)
             st.error(f"❌ **HTTP Error {e.response.status_code}**")
@@ -524,27 +543,38 @@ if submitted and question.strip():
             except:
                 with st.expander("🔧 Raw Response"):
                     st.code(e.response.text)
-                
+            st.session_state["analysis_result"] = None
+            st.session_state["analysis_error"] = f"HTTP Error {e.response.status_code}"
+            st.session_state["expand_sources"] = False
+
         except ValueError as e:
             status.update(label="❌ Parse Error", state="error", expanded=False)
             st.error("❌ **JSON Parse Error**: Onverwacht antwoordformaat")
             st.info(f"💡 **Technisch detail**: {str(e)}")
-            
+            st.session_state["analysis_result"] = None
+            st.session_state["analysis_error"] = "Parse Error"
+            st.session_state["expand_sources"] = False
+
         except Exception as e:
             status.update(label="❌ Onverwachte fout", state="error", expanded=False)
             st.error("❌ **Onverwachte fout**")
             with st.expander("🔧 Stack Trace"):
                 st.exception(e)
+            st.session_state["analysis_result"] = None
+            st.session_state["analysis_error"] = "Onverwachte fout"
+            st.session_state["expand_sources"] = False
 
 elif submitted:
     st.warning("⚠️ Vul eerst een vraag in om de analyse te starten")
+
+if st.session_state["analysis_result"] and not submitted:
+    render_analysis(st.session_state["analysis_result"], st.session_state["analysis_question"])
 
 # ============================================================================
 # FOOTER
 # ============================================================================
 
 st.divider()
-
 st.markdown("""
 <div style="text-align: center; padding: 3rem 0;">
     <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
