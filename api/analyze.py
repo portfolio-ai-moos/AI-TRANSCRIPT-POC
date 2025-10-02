@@ -82,11 +82,14 @@ def vector_search(question: str, top_k: int = 5) -> List[Dict[str, Any]]:
     query_embedding = get_embedding(question)
     
     # Call Supabase RPC function for vector search
+    # Include all parameters to resolve function overloading
     response = client.rpc(
         'match_documents',
         {
             'query_embedding': query_embedding,
-            'match_count': top_k
+            'match_threshold': 0.5,
+            'match_count': top_k,
+            'filter': {}
         }
     ).execute()
     
