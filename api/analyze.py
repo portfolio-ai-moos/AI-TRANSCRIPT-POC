@@ -132,7 +132,7 @@ INSTRUCTIES:
 ANTWOORD (alleen JSON, geen extra tekst):"""
     
     # Generate response with Gemini
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-flash-latest')
     response = model.generate_content(prompt)
     
     # Parse JSON from response
