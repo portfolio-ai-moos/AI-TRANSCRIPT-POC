@@ -87,12 +87,13 @@ SUPABASE_KEY=your_supabase_anon_or_service_key
 #### D. Deploy & Test
 ```bash
 # Vercel deployment URL (production)
-https://ai-transcript-analyzer.vercel.app/api/analyze
+https://ai-transcript-poc.vercel.app/api/analyze
 ```
 
 Test de API:
 ```bash
-curl -X POST https://ai-transcript-analyzer.vercel.app/api/analyze \
+curl -X POST https://ai-transcript-poc.vercel.app/api/analyze \
+  -H "Content-Type: application/json" \
   -d '{"question": "Wat zijn de meest voorkomende klachten?"}'
 ```
 
@@ -109,7 +110,7 @@ curl -X POST https://ai-transcript-analyzer.vercel.app/api/analyze \
 5. **Advanced settings** → Secrets:
 
 ```toml
-API_ENDPOINT = "https://ai-transcript-demo-1.vercel.app/api/analyze"
+API_ENDPOINT = "https://ai-transcript-poc.vercel.app/api/analyze"
 ```
 
 6. Deploy! 🚀
@@ -122,7 +123,7 @@ pip install -r requirements.txt
 
 # Maak .streamlit/secrets.toml
 mkdir -p .streamlit
-echo 'API_ENDPOINT = "https://ai-transcript-demo-1.vercel.app/api/analyze"' > .streamlit/secrets.toml
+echo 'API_ENDPOINT = "https://ai-transcript-poc.vercel.app/api/analyze"' > .streamlit/secrets.toml
 
 # Run Streamlit
 streamlit run app.py
