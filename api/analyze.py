@@ -131,8 +131,8 @@ INSTRUCTIES:
 
 ANTWOORD (alleen JSON, geen extra tekst):"""
     
-    # Generate response with Gemini
-    model = genai.GenerativeModel('gemini-2.0-flash-exp')
+    # Generate response with Gemini 2.5 Flash
+    model = genai.GenerativeModel('gemini-2.5-flash')
     response = model.generate_content(prompt)
     
     # Parse JSON from response
